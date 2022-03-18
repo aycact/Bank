@@ -1,6 +1,6 @@
 // Demo Class Account 2 :
 public class Account implements IFileInfor{
-    String nameTK, stk, phoneNumber, address;
+    String namestk, stk, phoneNumber, address;
     int money;
     
     List<Receiver> receiverList = new ArrayList<>();
