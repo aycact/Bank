@@ -18,7 +18,7 @@ public class Account implements IFileInfor{
     }
 
     public String getNamestk() {
-        return stkname;
+        return namestk;
     }
 
     public void setNamestk(String namestk) {
