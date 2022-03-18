@@ -1,174 +1,179 @@
 package data;
-import java.util.AbstractCollection;
+
+//import data.Account;
+import util.MyToys;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.SortedMap;
 
 public class Cabinet {
-    public Account[] account = new Account[1000];
-    public int n;
-    public Scanner sc = new Scanner(System.in);
+  // list lưu trữ các Account
+  private ArrayList<Account> arr = new ArrayList<>();
 
-    public Cabinet () {
-
+  public void addAccount() {
+    String soTK, ten;
+    double tien;
+    //kiểm tra nhập số tài khoản, không cho trùng
+    while (true) {
+      soTK = MyToys.getString("Vui lòng nhập số tài khoản:", "Vui lòng nhập lại!");
+      if (searchAccount(soTK) != null) {
+        System.out.println("Số tài khoản này đã tồn tại! Vui lòng tạo số tài khoản khác!");
+      } else {
+        break;
+      }
     }
-    public void input (Account account) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Nhập số tài khoản: ");
-        account.setSoTK(sc.next());
-        System.out.print("Nhập tên tài khoản: ");
-        sc.nextLine();
-        account.setTen(sc.nextLine());
-        System.out.print("Nhập số tiền trong tài khoản: ");
-        account.setTien(sc.nextDouble());
+    ten = MyToys.getString("Vui lòng nhập tên:", "Vui lòng nhập lại!");
+    tien = MyToys.getADouble("Vui lòng nhập số tiền:", "Vui lòng nhập lại!", 0, 30_000_000);
+    // thêm 1 Account vào mảng
+    arr.add(new Account(soTK, ten, tien));
+    System.out.println("------------------------------------");
+    System.out.println("Tạo tài khoản thành công!");
+  }
+  // in danh sách tài khoản
+  public void printAccountList() {
+    Account.showTitle();
+    for (Account x : arr) {
+      x.showAccount();
+    }
+  }
+
+  /* CÁC HÀM TÌM KIẾM */
+
+  public Account searchAccount(String soTK) {
+    if (arr.isEmpty()) {
+      return null;
+    }
+    for (int i = 0; i < arr.size(); i++) {
+      if (arr.get(i).getSoTK().equalsIgnoreCase(soTK)) {
+        return arr.get(i);
+      }
+    }
+    return null;
+  }
+
+  public void searchAccount() {
+    String soTK;
+    soTK = MyToys.getString("Vui lòng nhập số tài khoản bạn muốn tìm:", "Vui lòng nhập lại!");
+    Account x = searchAccount(soTK);
+    System.out.println("------------------------------------");
+    if (x == null) {
+      System.out.println("Không tìm thấy!");
+    } else {
+      System.out.println("Tìm thấy: " + x.getTen() + "!");
+      Account.showTitle();
+      x.showAccount();
+    }
+  }
+
+  public int searchPosOfAccount(String soTK) {
+    if (arr.isEmpty()) return -1; // ko tìm gì cả
+    // quét hết list, coi có trùng id nào ko, thì trả về vị trí
+    for (int i = 0; i < arr.size(); i++) if (arr.get(i).getSoTK().equalsIgnoreCase(soTK)) return i;
+    return -1;
+  }
+
+  // hàm xoá 1 Account
+  public void removeAccount() {
+    String soTK;
+    int pos; // vị trí tìm thấy
+    soTK = MyToys.getString("Nhập số tài khoản muốn xoá:", "Vui lòng nhập lại");
+    pos = searchPosOfAccount(soTK);
+    System.out.println("------------------------------------");
+    if (pos == -1) System.out.println("Không tìm thấy!");
+    else {
+      arr.remove(pos);
+      System.out.println("Đã xoá thành công!");
+    }
+  }
+
+  public void napTien() {
+    String soTK;
+    double tien;
+    soTK = MyToys.getString("Vui lòng nhập số tài khoản bạn muốn nạp tiền:", "Vui lòng nhập lại!");
+    Account x = searchAccount(soTK);
+    if (x == null) {
+      System.out.println("Không tìm thấy!");
+    } else {
+      System.out.println("Tìm thấy: " + x.getTen() + "!");
+      Account.showTitle();
+      x.showAccount();
+      tien =
+          MyToys.getADouble(
+              "Nhập số tiền muốn nạp (Tối đa 30 triệu/lần):", "Vui lòng nhập lại!", 0, 30_000_000);
+      x.setTien(x.getTien() + tien);
+      System.out.println("------------------------------------");
+      System.out.println("Nạp tiền thành công!");
+      Account.showTitle();
+      x.showAccount();
+    }
+  }
+
+  public void rutTien() {
+    String soTK;
+    double tien;
+    soTK = MyToys.getString("Vui lòng nhập số tài khoản bạn muốn rút tiền:", "Vui lòng nhập lại!");
+    Account x = searchAccount(soTK);
+    if (x == null) {
+      System.out.println("Không tìm thấy!");
+    } else {
+      System.out.println("Tìm thấy: " + x.getTen() + "!");
+      Account.showTitle();
+      x.showAccount();
+      tien =
+          MyToys.getADouble(
+              "Nhập số tiền muốn muốn rút (Tối đa 30 triệu/lần):",
+              "Vui lòng nhập lại! Số tiền tối đa có thể rút là: " + x.getTien() + " VND!",
+              0,
+              x.getTien());
+      System.out.println("------------------------------------");
+      x.setTien(x.getTien() - tien);
+      System.out.println("Rút tiền thành công!");
+      Account.showTitle();
+      x.showAccount();
+    }
+  }
+
+  public void chuyenKhoan() {
+    if (arr.size() < 2) {
+      System.out.println("Không đủ số lượng tài khoản để thực hiện!");
+      return;
+    }
+    String soTKChuyen, soTKNhan;
+    double tien;
+
+    soTKChuyen = MyToys.getString("Nhập số tài khoản chuyển: ", "Vui lòng nhập lại!");
+    Account x1 = searchAccount(soTKChuyen);
+    if (x1 == null) {
+      System.out.println("Không tìm thấy!");
+      return;
+    } else {
+      System.out.println("Tìm thấy: " + x1.getTen() + "!");
+      Account.showTitle();
+      x1.showAccount();
     }
 
-    public void addAcount () {
-        n = sc.nextInt();
-        for (int i = 0; i < n; i++) {
-            System.out.println("Nhập khách hàng thứ " + (i+1) + " ");
-            account[i] = new Account();
-            input(account[i]);
-        }
+    soTKNhan = MyToys.getString("Nhập số tài khoản nhận: ", "Vui lòng nhập lại!");
+    Account x2 = searchAccount(soTKNhan);
+    if (x2 == null) {
+      System.out.println("Không tìm thấy!");
+      return;
+    } else {
+      System.out.println("Tìm thấy: " + x2.getTen() + "!");
+      Account.showTitle();
+      x2.showAccount();
     }
 
-    public void searchAccount () {
-        String stk;
-        System.out.print("Nhập số tài khoản cần tìm: ");
-        stk = sc.next();
-        int i = 0;
-        while (i < n) {
-            if (stk.equals(account[i].getSoTK()) == true) {
-                title();
-                output(account[i]);
-            }
-            i++;
-        }
-        System.out.println("Không tìm thấy tài khoản!");
-    }
+    tien =
+        MyToys.getADouble(
+            "Nhập số tiền cần chuyển (Tối đa 30 triệu/lần): ",
+            "Vui lòng nhập lại! Số tiền tối đa có thể chuyển là " + x1.getTien() + " VND!",
+            0,
+            x1.getTien());
 
-    public Account searchAccount (String stk) {
-        int i = 0;
-        while (i < n) {
-            if (stk.equals(account[i].getSoTK()) == true) {
-                return account[i];
-            }
-            i++;
-        }
-        return null;
-    }
-
-    public void title () {
-        System.out.printf("%20s%20s%20s","Số TK", "Tên TK", "Số tiền");
-        System.out.println();
-    }
-
-    public void napTien() {
-        String stk;
-        double tien;
-        System.out.print("Nhập số tài khoản cần nạp tiền: ");
-        stk = sc.next();
-        System.out.print("Nhập số tiền cần nạp: ");
-        tien = sc.nextDouble();
-        if (searchAccount(stk) != null) {
-            searchAccount(stk).setTien(searchAccount(stk).getTien()+tien);
-            System.out.println("Nạp tiền thành công!");
-        }
-        else {
-            System.out.println("Không tìm thấy tài khoản!");
-        }
-    }
-
-    public void rutTien() {
-        String stk;
-        double tien;
-        System.out.print("Nhập số tài khoản cần rút tiền: ");
-        stk = sc.next();
-        System.out.print("Nhập số tiền cần rút: ");
-        tien = sc.nextDouble();
-        if (searchAccount(stk) != null) {
-            if (searchAccount(stk).getTien() > tien) {
-                searchAccount(stk).setTien(searchAccount(stk).getTien() - tien);
-                System.out.println("Rút tiền thành công!");
-            }
-            else {
-                System.out.println("Tài khoản không đủ để rút!");
-            }
-        }
-        else {
-            System.out.println("Không tìm thấy tài khoản!");
-        }
-    }
-
-    public void chuyenKhoan() {
-        String stkchuyen;
-        String stknhan;
-        double tien;
-        boolean check = false;
-        System.out.print("Nhập số tài khoản chuyển: ");
-        stkchuyen = sc.next();
-        System.out.print("Nhập só tài khoản nhận: ");
-        stknhan = sc.next();
-        System.out.print("Nhập số tiền cần chuyển: ");
-        tien = sc.nextDouble();
-        if (searchAccount(stkchuyen) != null) {
-            if (searchAccount(stkchuyen).getTien() > tien) {
-                searchAccount(stkchuyen).setTien(searchAccount(stkchuyen).getTien()-tien);
-                check = true;
-            }
-            else {
-                System.out.println("Tài khoản không đủ để chuyển!");
-            }
-        }
-        else {
-            System.out.println("Không tìm thấy tài khoản!");
-        }
-
-        if (check == true) {
-            if (searchAccount(stknhan) != null) {
-                searchAccount(stkchuyen).setTien(searchAccount(stknhan).getTien() + tien);
-                System.out.println("Chuyển khoản thành công!");
-            }
-        }
-        else {
-            System.out.println("Không tìm thấy tài khoản!");
-        }
-    }
-
-
-    public void output (Account account) {
-        System.out.printf("%20s%20s%20s",account.getSoTK(),account.getTen(),account.getTien());
-        System.out.println();
-    }
-
-    public void printAccountList () {
-        title();
-        int i = 0;
-        while (i < n) {
-            output(account[i]);
-            i++;
-        }
-    }
-
-    public void removeAccount () {
-        String stk;
-        System.out.print("Nhập số tài khoản cần xóa: ");
-        stk = sc.next();
-        if (searchAccount(stk) != null) {
-            int i = 0;
-            n -= 1;
-            while (i < n) {
-                if (searchAccount(stk) == account[i]) {
-                    for (int j = i; j < n; j++) {
-                        account[j] = account[j+1];
-                    }
-                    System.out.println("Xóa tài khoản thành công!");
-                    break;
-                }
-                i++;
-            }
-        } else {
-            System.out.println("Không tìm thấy tài khoản cần xóa!");
-        }
-    }
+    x1.setTien(x1.getTien() - tien);
+    x2.setTien(x2.getTien() + tien);
+    System.out.println("------------------------------------");
+    System.out.println("Chuyển khoản thành công!");
+    Account.showTitle();
+    x1.showAccount();
+    x2.showAccount();
+  }
 }
