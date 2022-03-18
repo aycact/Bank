@@ -1,53 +1,34 @@
 package data;
-import java.text.NumberFormat;
-import java.util.Scanner;
- 
+
 public class Account {
- 
-    private long soTK;
-    private String tenTK;
-    private double soTienTrongTK;
- 
-    Scanner sc = new Scanner(System.in);
+  String soTK;
+  String ten;
+  double tien;
 
-    public Account() {
-    }
+  public Account(String soTK, String ten, double tien) {
+    this.soTK = soTK;
+    this.ten = ten;
+    this.tien = tien;
+  }
 
-    public Account(long soTK, String tenTK, double soTienTrongTK) {
-        this.soTK = soTK;
-        this.tenTK = tenTK;
-        this.soTienTrongTK = soTienTrongTK;
-    }
+  public String getSoTK() {
+    return soTK;
+  }
 
-    public long getSoTK() {
-        return this.soTK;
-    }
- 
-    public void setSoTK(long soTK) {
-        this.soTK = soTK;
-    }
- 
-    public String getTenTK() {
-        return this.tenTK;
-    }
- 
-    public void setTenTK(String tenTK) {
-        this.tenTK = tenTK;
-    }
- 
-    public double getSoTienTrongTK() {
-        return this.soTienTrongTK;
-    }
- 
-    public void setSoTienTrongTK(double soTienTrongTK) {
-        this.soTienTrongTK = soTienTrongTK;
-    }
- 
- 
-    public String toString() {
-       
-        NumberFormat currencyEN = NumberFormat.getCurrencyInstance();
-        String str1 = currencyEN.format(soTienTrongTK);
-        return soTK + "-" + tenTK + "-" + str1;
-    }
+  public void setSoTK(String soTK) {
+    this.soTK = soTK;
+  }
+
+  public double getTien() {
+    return tien;
+  }
+
+  public void showAccount() {
+    System.out.printf("|%-10s|%-20s|%-24.4f|\n", soTK, ten, tien);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("|%-10s|%-20s|%-24.4f|\n", soTK, ten, tien);
+  }
 }
