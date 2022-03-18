@@ -14,21 +14,20 @@ public class Account {
   public String getSoTK() {
     return soTK;
   }
-
-  public void setSoTK(String soTK) {
-    this.soTK = soTK;
-  }
-
+  public String getTen(){
+    return ten;
+  }  
   public double getTien() {
     return tien;
   }
-
-  public void showAccount() {
-    System.out.printf("|%-10s|%-20s|%-24.4f|\n", soTK, ten, tien);
+  public void setTien(double tien){
+    this.tien = tien;
   }
-
-  @Override
-  public String toString() {
-    return String.format("|%-10s|%-20s|%-24.4f|\n", soTK, ten, tien);
+  public static void showTitle(){
+    System.out.printf("|%-12s|%-20s|%-20s|\n", "SO TAI KHOAN", "TEN KHACH HANG", "SO TIEN");
+  }
+  
+  public void showAccount() {
+    System.out.printf("|%-12s|%-20s|%-16.3f VND|\n", soTK, ten, tien);
   }
 }
