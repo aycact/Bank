@@ -101,10 +101,10 @@ public class Account implements IFileInfor{
         money -= transfer.getMoney();
     }
   public String toString() {
-        return "Account{" + "namestk=" + fullname + ", stk=" + stk + ", phoneNumber=" + phoneNumber + ", address=" + address + ", money=" + money + '}';
+        return "Account{" + "namestk=" + namestk + ", stk=" + stk + ", phoneNumber=" + phoneNumber + ", address=" + address + ", money=" + money + '}';
     }
   public String getFileInfor() {
-        return fullname+","+stk+","+phoneNumber+","+address+","+money;
+        return namestk+","+stk+","+phoneNumber+","+address+","+money;
     }
     
     public void putFileInfor(String str) {
